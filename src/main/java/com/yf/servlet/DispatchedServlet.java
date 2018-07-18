@@ -32,6 +32,7 @@ public class DispatchedServlet extends HttpServlet {
           doInstance();
           for(Map.Entry<String,Object> entity : beans.entrySet()){
               System.out.println("key:"+entity.getKey()+";value:"+entity.getValue());
+
           }
           // 依赖注入
           doAutoWired();
