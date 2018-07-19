@@ -2,15 +2,14 @@ package com.yf.annotation;
 
 import java.lang.annotation.*;
 
-@Target(ElementType.TYPE)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface YanglfController {
+public @interface YanglfRequertParam {
 
     /**
-     * controller 注册的别名
+     * 参数名
      * @return
      */
-    String value() default "";
-
+    String value() ;
 }

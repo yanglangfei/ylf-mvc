@@ -1,10 +1,10 @@
 package com.yf.controller;
 
 import com.yf.annotation.YanglfController;
-import com.yf.annotation.YanglfRequestMappering;
+import com.yf.annotation.YanglfRequestMapping;
 
 @YanglfController
-@YanglfRequestMappering("/index")
+@YanglfRequestMapping("/index")
 public class IndexController {
 
 

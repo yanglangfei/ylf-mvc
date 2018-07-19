@@ -2,13 +2,13 @@ package com.yf.annotation;
 
 import java.lang.annotation.*;
 
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE,ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface YanglfController {
+public @interface YanglfRequestMapping {
 
     /**
-     * controller 注册的别名
+     * 方法映射的url
      * @return
      */
     String value() default "";
