@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
@@ -27,7 +28,7 @@ public class YanglfDispatchedServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) {
           //加载配置文件里的参数
-          loadConfiguration(config);
+       //   loadConfiguration(config);
           //将所有的.class 文件加入集合
           scanPackage("com.yf");
           //通过反射拿到class实例，放入IOC容器
@@ -75,9 +76,8 @@ public class YanglfDispatchedServlet extends HttpServlet {
             YanglfRequestMapping mapping = clazz.getAnnotation(YanglfRequestMapping.class);
             baseUrl = mapping.value();
 
-            Method [] methods = entity.getKey().getClass().getMethods();
+            Method [] methods = clazz.getMethods();
             for (Method method : methods) {
-                //可访问私有属性
                 if(method.isAnnotationPresent(YanglfRequestMapping.class)){
                     YanglfRequestMapping annotation = method.getAnnotation(YanglfRequestMapping.class);
                     String url = annotation.value();
@@ -198,10 +198,24 @@ public class YanglfDispatchedServlet extends HttpServlet {
                 paramValues[i]=req;
                 continue;
             }
-
-
-
+            if(requestParam.equals("HttpServletResponse")){
+                paramValues[i]=resp;
+                continue;
+            }
+            if(requestParam.equals("String")){
+                for (Map.Entry<String, String[]> param : parameterMap.entrySet()) {
+                    String value =Arrays.toString(param.getValue()).replaceAll("\\[|\\]", "").replaceAll(",\\s", ",");
+                    paramValues[i]=value;
+                }
+            }
         }
 
+        try {
+            method.invoke(this.controllerMap.get(url),paramValues);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 }
